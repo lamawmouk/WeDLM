@@ -34,7 +34,7 @@
 
 <!-- Demo GIF -->
 <img src="images/demo.gif" width="90%" alt="WeDLM vs Qwen3-8B-Instruct Speed Comparison">
-<p><i>⬆️ Real-time comparison: WeDLM-8B-Instruct (left) vs Qwen3-8B-Instruct with vLLM (right) on the same prompt</i></p>
+<p><i>⬆️ Real-time comparison: Qwen3-8B-Instruct with vLLM (left) vs WeDLM-8B-Instruct (right) on the same prompt</i></p>
 
 </div>
 

@@ -48,6 +48,7 @@
 
 | Date | Update |
 |:-----|:-------|
+| **2026-01-06** | 📊 Added AR baseline evaluation script for benchmarking against autoregressive models |
 | **2026-01-02** | 🎓 Released fine-tuning framework with support for dense & MagiAttention backends |
 | **2025-12-29** | 🚀 Initial release: WeDLM-7B/8B models, inference engine, evaluation suite |
 
@@ -271,13 +272,24 @@ Reproduce our results using the provided scripts:
 # 1. Download datasets
 python -m evaluation.download_datasets --all
 
-# 2. Run evaluation (e.g., GSM8K)
+# 2. Run WeDLM evaluation (e.g., GSM8K)
 bash evaluation/evaluation_base.sh \
     --model_path "tencent/WeDLM-8B-Instruct" \
     --output_dir "output/" \
     --datasets "gsm8k" \
     --num_gpus 8
 ```
+
+**Evaluate AR Baseline Models:**
+
+To benchmark against autoregressive models using vLLM:
+
+```bash
+bash evaluation/ar_baseline_script.sh
+```
+
+> [!TIP]
+> Edit `ar_baseline_script.sh` to specify your model path (`MODEL_PATH`) and select datasets from the list.
 
 *See `evaluation/demo.sh` for all benchmark commands.*
 

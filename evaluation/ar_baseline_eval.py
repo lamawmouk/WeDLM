@@ -230,12 +230,3 @@ if __name__ == "__main__":
 
     parsed_args = parser.parse_args()
     main(parsed_args)
-    
-"""
-python -m evaluation.ar_eval_main \
-    --model-path /mnt/cephfs_nj/aiweiliu/huggingface_models/Qwen3-8B-Instruct \
-    --dataset-name "gsm8k" \
-    --output-dir "output/Qwen3-8B-Instruct/gsm8k/" \
-    --num-gpus 8 \
-    --trust-remote-code
-"""

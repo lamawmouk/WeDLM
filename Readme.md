@@ -48,10 +48,10 @@
 
 | Date | Update |
 |:-----|:-------|
+| **2026-01-10** | 🔌 [chatllm.cpp](https://github.com/foldl/chatllm.cpp) now supports WeDLM models |
 | **2026-01-06** | 📊 Added AR baseline evaluation script for benchmarking against autoregressive models |
 | **2026-01-02** | 🎓 Released fine-tuning framework with support for dense & MagiAttention backends |
 | **2025-12-29** | 🚀 Initial release: WeDLM-7B/8B models, inference engine, evaluation suite |
-
 </details>
 
 <br>

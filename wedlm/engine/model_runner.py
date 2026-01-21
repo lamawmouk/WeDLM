@@ -40,6 +40,7 @@ from wedlm.config import Config
 from wedlm.engine.sequence import Sequence
 from wedlm.engine.sampler import Sampler
 from wedlm.engine.wedlm_decoder import WeDLMDecoder
+from wedlm.engine.jacobi_decoder import JacobiWeDLMDecoder
 from wedlm.models.wedlm import WeDLMForDiffusionLM
 from wedlm.utils.context import set_context, get_context, reset_context
 from wedlm.utils.loader import load_model
@@ -130,12 +131,26 @@ class ModelRunner:
 
     def _init_wedlm_decoder(self):
         """Initialize the WeDLM decoder for sliding window decoding."""
-        self.wedlm_decoder = WeDLMDecoder(
-            mask_token_id=self.mask_token_id,
-            block_size=self.block_size,
-            wedlm_window_size=self.wedlm_window_size,
-            sampler=self.sampler,
-        )
+        if self.config.use_jacobi:
+            # Use Jacobi-enabled decoder
+            self.wedlm_decoder = JacobiWeDLMDecoder(
+                mask_token_id=self.mask_token_id,
+                block_size=self.block_size,
+                wedlm_window_size=self.wedlm_window_size,
+                vocab_size=self.config.hf_config.vocab_size,
+                max_retries=self.config.jacobi_max_retries,
+                seed=self.config.jacobi_seed,
+            )
+            self.use_jacobi = True
+        else:
+            # Use standard decoder
+            self.wedlm_decoder = WeDLMDecoder(
+                mask_token_id=self.mask_token_id,
+                block_size=self.block_size,
+                wedlm_window_size=self.wedlm_window_size,
+                sampler=self.sampler,
+            )
+            self.use_jacobi = False
 
     def _init_shared_memory(self):
         """Initialize shared memory for multi-GPU communication."""
@@ -489,8 +504,11 @@ class ModelRunner:
         # Run model forward pass
         logits = self.run_model(prepared.input_ids, prepared.positions, is_prefill=False)
 
-        # Process outputs through WeDLMDecoder
-        step_results = self.wedlm_decoder.process_decode_outputs(seqs, prepared, logits)
+        # Process outputs through WeDLMDecoder (use Jacobi version if enabled)
+        if self.use_jacobi:
+            step_results = self.wedlm_decoder.process_decode_outputs_jacobi(seqs, prepared, logits)
+        else:
+            step_results = self.wedlm_decoder.process_decode_outputs(seqs, prepared, logits)
 
         reset_context()
         return step_results

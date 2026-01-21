@@ -47,6 +47,11 @@ class Config:
     # WeDLM decoding window size
     wedlm_window_size: int = 16
 
+    # Jacobi iteration configuration
+    use_jacobi: bool = False
+    jacobi_max_retries: int = 3
+    jacobi_seed: int | None = None
+
     # Model-specific configuration
     mask_token_id: int | None = None
     hf_config: AutoConfig | None = None
